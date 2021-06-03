@@ -1,0 +1,82 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+    <title>SBS Frame Animator</title>
+    <link href="fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/app.css" rel="stylesheet" type="text/css" />
+<body ng-controller="AppController" ng-cloak ng-mouseover="stopDrawing()" BACKGROUND="img\sbs.jpg">
+
+                 
+<div class="app">
+    <div class="editor">
+        <div class="frame frame-editor">
+            <div class="onion-skin" ng-hide="isAnimating">
+                <div class="row" ng-repeat="row in frames[getPreviousFrameIndex()] track by $index">
+                    <div class="pixel" ng-class="{selected:frames[getPreviousFrameIndex()][$parent.$index][$index]==true}" ng-repeat="pixel in frames[currentFrameIndex][$index] track by $index"></div>
+                </div>
+            </div>
+            <div class="normal-frame">
+                <div class="row" ng-repeat="row in frames[currentFrameIndex] track by $index">
+                    <div class="pixel" ng-mousedown="startDrawing($parent.$index,$index,$event)" ng-mouseup="stopDrawing()" ng-mouseover="checkDraw($parent.$index,$index,$event)" ng-class="{selected:frames[currentFrameIndex][$parent.$index][$index]==true}" ng-repeat="pixel in frames[currentFrameIndex][$index] track by $index"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        
+        <div class="button shift" ng-class="{inactive:isShowingCode||isShowingInput}">
+            <div class="up" ng-click="shift('up')" title="Shift Up"><i class="fa fa-arrow-up"></i></div>
+            <div class="right" ng-click="shift('right')" title="Shift Right"><i class="fa fa-arrow-right"></i></div>
+            <div class="down" ng-click="shift('down')" title="Shift Down"><i class="fa fa-arrow-down"></i></div>
+            <div class="left" ng-click="shift('left')" title="Shift Left"><i class="fa fa-arrow-left"></i></div>
+        </div>
+        <div class="button" ng-class="{inactive:isShowingCode||isShowingInput}" ng-click="copyFrame()" title="Copy Current Frame"><i class="fa fa-copy"></i></div>
+        <div class="button" ng-class="{inactive:isShowingCode||isShowingInput}" ng-click="addFrame()" title="Add/Insert Frame"><i class="fa fa-plus"></i></div>
+        <div class="button" ng-class="{inactive:isShowingCode||isShowingInput}" ng-click="removeFrame()" title="Delete Current Frame"><i class="fa fa-minus"></i></div>
+        <div class="button" ng-class="{inactive:isShowingCode||isShowingInput}" ng-click="toggleAnimation()" ng-show="!isAnimating" title="Play Animation"><i class="fa fa-play"></i></div>
+        <div class="button anim-pause-button" ng-class="{inactive:isShowingCode||isShowingInput}" ng-click="toggleAnimation()" ng-show="isAnimating" title="Pause Animation"><i class="fa fa-pause"></i></div>
+        <div class="button" ng-class="{inactive:isShowingInput}" ng-click="toggleCodeOverlay()" title="Show Code"><i class="fa fa-file-code-o"></i></div>
+        
+    </div>
+    <div class="frame-scroll-container" ng-show="!isShowingCode">
+        <div class="frames" ng-style="{'width':(100*frames.length)+'px'}">
+            <div class="frame" ng-repeat="frame in frames track by $index" ng-click="selectFrame($index)" ng-class="{current:$index==currentFrameIndex}">
+                <div>
+                    <div class="row" ng-repeat="row in frames[$index] track by $index">
+                        <div class="pixel" ng-class="{selected:frames[$parent.$parent.$index][$parent.$index][$index]==true}" ng-repeat="pixel in frames[$parent.$index][$index] track by $index"></div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="code-overlay" ng-show="isShowingCode">
+        <div>
+            <textarea>{{outputCode}}</textarea>
+        </div>
+    </div>
+
+    <div class="code-overlay" ng-show="isShowingInput">
+        <div>
+            <textarea ng-model="inputCode"></textarea>
+        </div>
+    </div>
+</div>
+<style>
+img.links {width: 60px;height: 60px; 70px;border-radius: 50%;border: 4px dashed white;background-clip: content-box;transition: .5s;}
+
+img.links:hover {border: 10px dashed red;color: white;margin-left: -5px;transform: translateX(10px) rotate(360deg);}
+
+.end {padding-top: 50px;padding-buttom: 50px; color: #fff; font-size: 15px; }
+</style>
+				  
+				  <center><a href="https://www.facebook.com/sbs.io" ><img  src="img\facebook.png" class="links"></a>
+                  <a href="https://www.youtube.com/channel/UCOEaflNsF-uFWJ279ITzuAQ" "><img  src="img\youtube.png" class="links"></a>
+				<center><div class="end"><p>SBS 8x8 Led Matrix Frame Animator ... Copyright © 2019 SBS Channel </p> </div> </center>
+              
+                 </center> 
+<script src="js/angular.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
